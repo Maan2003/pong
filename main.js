@@ -32,9 +32,7 @@ const PADDLE_WIDTH = 20;
 const PADDLE_HEIGHT = 100;
 function draw(t) {
     // clear the canvas
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, width, height)
-    ctx.fillStyle = "white";
+    ctx.clearRect(0, 0, width, height)
     ctx.beginPath();
 
     // draw the paddles
