@@ -6,8 +6,8 @@ export function setupCanvas(canvas) {
         const scale = window.devicePixelRatio;
         width = canvas.clientWidth;
         height = canvas.clientHeight;
-        canvas.width = Math.floor(width * scale);
-        canvas.height = Math.floor(height * scale);
+        canvas.width = Math.ceil(width * scale);
+        canvas.height = Math.ceil(height * scale);
         ctx = canvas.getContext("2d");
         if (ctx === null) {
             throw "Unable to get context";
