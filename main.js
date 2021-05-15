@@ -10,9 +10,10 @@ let v1 = 0;
 let v2 = 0;
 let bx;
 let by;
-
+let ball_style = "white"
 let bvx;
 let bvy;
+let game_over = false;
 function main() {
     let canvas = $("#main");
     if (canvas === null) {
@@ -20,26 +21,34 @@ function main() {
     }
     setupCanvas(canvas);
     drawLoop(draw)
+    spawn_ball()
+}
+function spawn_ball() {
     bx = width / 2.;
     by = height / 2.;
     let theta = Math.random() * Math.PI * 2;
-    bvx = 4 * Math.random() + 2;
+    bvx = (4 * Math.random() + 2) * ((Math.random() < 0.5) ? - 1 : 1);
     bvy = 2 * Math.random();
+    ball_style = "white"
+    game_over = false;
 }
-main();
 
 const PADDLE_WIDTH = 20;
 const PADDLE_HEIGHT = 100;
 function draw(t) {
     // clear the canvas
-    ctx.clearRect(0, 0, width, height)
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, width, height)
     ctx.beginPath();
 
     // draw the paddles
+    ctx.fillStyle = "red";
     ctx.fillRect(50, p1 * height - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT);
+    ctx.fillStyle = "blue";
     ctx.fillRect(width - 50 - PADDLE_WIDTH, p2 * height - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT);
 
     // draw the ball
+    ctx.fillStyle = ball_style;
     ctx.ellipse(bx, by, 20, 20, 0, 0, Math.PI * 2.);
     ctx.fill();
 
@@ -63,13 +72,33 @@ function draw(t) {
     // ball physics
     bx += bvx;
     by += bvy;
-    if (bx < 0) {
-        bx = 0;
-        bvx *= -1;
+    if (bx < 0 && !game_over) {
+        bvy = 0;
+        bvx = 0;
+        ball_style = "blue"
+        let even = 0;
+        let inv = setInterval(() => {
+            ball_style = (even % 2) ? "blue" : "white";
+            even++;
+        }, 100)
+        setTimeout(() => {
+            spawn_ball(); clearInterval(inv); $("#score2").innerHTML = parseInt($("#score2").innerHTML) + 1;
+        }, 1000)
+        game_over = true;
     }
-    if (bx > width) {
-        bx = width;
-        bvx *= -1;
+    if (bx > width && !game_over) {
+        bvy = 0;
+        bvx = 0;
+        ball_style = "red"
+        let even = 0;
+        let inv = setInterval(() => {
+            ball_style = (even % 2) ? "red" : "white";
+            even++;
+        }, 100)
+        setTimeout(() => {
+            spawn_ball(); clearInterval(inv); $("#score1").innerHTML = parseInt($("#score1").innerHTML) + 1;
+        }, 1000)
+        game_over = true;
     }
     if (by < 0) {
         by = 0;
@@ -129,10 +158,10 @@ document.addEventListener("keydown", ev => {
         case 87:
             f1 = -1;
             break;
-        case 69:
+        case 69: case 98: case 40:
             f2 = 1;
             break;
-        case 85:
+        case 85: case 104: case 38:
             f2 = -1;
             break;
     }
@@ -140,17 +169,12 @@ document.addEventListener("keydown", ev => {
 
 document.addEventListener("keyup", ev => {
     switch (ev.keyCode) {
-        case 83:
+        case 83: case 87:
             f1 = 0;
             break;
-        case 87:
-            f1 = 0;
-            break;
-        case 69:
-            f2 = 0;
-            break;
-        case 85:
+        case 69: case 98: case 85: case 104: case 40: case 38:
             f2 = 0;
             break;
     }
 })
+main();

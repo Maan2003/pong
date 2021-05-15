@@ -1,12 +1,30 @@
-<canvas id="main"></canvas>
+<link href='https://fonts.googleapis.com/css?family=Goblin+One' rel='stylesheet'>
+<div style="display:flex; flex-direction: column; width: 100vw; height: 100vh; background: black; ">
+<div style="display:flex; position: absolute; width: 100%">
+  <div class="score" id="score1">
+    0
+  </div>
+  <div class="score" id="score2">
+    0
+  </div>
+</div>
+<div style="display: flex;flex: 1;min-height: 0px">
+<canvas id="main" style="flex: 1"></canvas>
+</div>
+</div>
 <script src="main.js" type="module"></script>
 <style>
-  #main {
-     width: 100vw;
-     height: 100vh;
-  }
   html, body {
      margin: 0;
      padding: 0;
+  }
+
+  .score {
+     color: white;
+     font-family: "Goblin One";
+     padding: 10px 20px;
+     font-size: 64px;
+     flex: 1;
+     text-align: center;
   }
 </style>
