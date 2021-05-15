@@ -177,4 +177,23 @@ document.addEventListener("keyup", ev => {
             break;
     }
 })
+document.addEventListener("pointerdown", ev => {
+    document.body.requestFullscreen()
+    let ans = 0;
+    if (ev.clientY > height / 2) {
+        ans = 1;
+    } else {
+        ans = -1;
+    }
+    if (ev.clientX < width / 2) {
+        f1 = ans;
+    } else {
+        f2 = ans;
+    }
+    ev.preventDefault();
+})
+document.addEventListener("pointerup", ev => {
+    f1 = f2 = 0;
+    ev.preventDefault();
+})
 main();
